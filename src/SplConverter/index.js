@@ -20,7 +20,6 @@ const ResultsView = ({stepKey = ''}) => {
     const { amount, splToken, direction } = useStatesContext()
     const shortNeonKey = useMemo(() => shortenAddress(account), [account])
     const shortSolanaKey = useMemo(() => publicKey ? shortenAddress(publicKey.toString()) : '', [publicKey])
-    console.log(splToken, amount, direction, account, publicKey, shortSolanaKey, shortNeonKey)
     const renderTransferInfo = () => {
         return <div>
             <span>Transfer </span>
