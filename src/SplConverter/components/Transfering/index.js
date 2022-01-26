@@ -2,19 +2,22 @@ import { useStatesContext } from "../../../contexts/states"
 import {ReactComponent as LoaderIcon} from '@/assets/loader.svg'
 import {ReactComponent as CloseIcon} from '@/assets/close.svg'
 import {ReactComponent as DoneIcon} from '@/assets/done.svg'
+import Button from "@/common/Button"
 export const Transfering = () => {
   const {transfering, setTransfering,
+    pending,
     solanaTransferSign, setSolanaTransferSign,
-    setAmount, resetSteps,
+    setAmount, resetSteps, rejected,
     neonTransferSign, setNeonTransferSign} = useStatesContext()
   const handleRepeatScript = () => {
     setSolanaTransferSign('')
     setNeonTransferSign('')
     resetSteps()
+    rejected.current = false
     setTransfering(false)
     setAmount(0)
   }
-  if (transfering) {
+  if (pending) {
     return <div className='loader'>
       <div className='loader__icon'>
         <LoaderIcon/>
@@ -23,6 +26,7 @@ export const Transfering = () => {
       <div className='loader__summary'>
         Usually takes 1-30 seconds to complete,<br/>
         don’t close browser window just yet</div>
+      {!transfering ? <Button className='mt-10' onClick={() => rejected.current = true}>Reject Transaction</Button> : null}
     </div>
   } else if (solanaTransferSign || neonTransferSign) {
     return <div className='flex flex-col items-center min-w-420px p-6 bg-white'>

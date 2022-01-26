@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 const STEPS = {
   source: {
     title: 'Source',
@@ -24,6 +24,7 @@ export const StateContext = createContext({
 
 export function StateProvider({ children = undefined}) {
   const [amount, setAmount] = useState(0.0)
+  const [pending, setPending] = useState(false)
   const [transfering, setTransfering] = useState(false)
   const [solanaTransferSign, setSolanaTransferSign] = useState('')
   const [neonTransferSign, setNeonTransferSign] = useState('')
@@ -31,6 +32,7 @@ export function StateProvider({ children = undefined}) {
   const [splToken, setSplToken] = useState({})
   const [steps, setSteps] = useState(STEPS)
   const [direction, setDirection] = useState('neon')
+  const rejected = useRef(false)
   const toggleDirection = () => {
     if (direction === 'neon') setDirection('solana')
     else setDirection('neon')
@@ -94,6 +96,13 @@ export function StateProvider({ children = undefined}) {
   // eslint-disable-next-line
   }, [amount, splToken])
 
+  useEffect(() => {
+    if (rejected.current === true && pending === true) {
+      setPending(false)
+    }
+  // eslint-disable-next-line
+  }, [rejected.current])
+
   return <StateContext.Provider
     value={{
       steps,
@@ -107,7 +116,9 @@ export function StateProvider({ children = undefined}) {
       error, setError,
       transfering, setTransfering,
       solanaTransferSign, setSolanaTransferSign,
-      neonTransferSign, setNeonTransferSign
+      neonTransferSign, setNeonTransferSign,
+      rejected,
+      pending, setPending
     }}>
     {children}
   </StateContext.Provider>

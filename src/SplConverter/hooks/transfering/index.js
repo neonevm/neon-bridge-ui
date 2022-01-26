@@ -15,11 +15,12 @@ export const useTransfering = () => {
   const {amount, splToken, setError,
     setSolanaTransferSign,
     setNeonTransferSign,
-    setTransfering} = useStatesContext()
+    setTransfering, setPending, rejected} = useStatesContext()
   const { publicKey } = useWallet()
   const { account } = useWeb3React()
   // TODO show error if mapping not found
   const connection = useConnection()
+
   const mergeTypedArraysUnsafe = (a, b) => {
     const c = new a.constructor(a.length + b.length)
     c.set(a)
@@ -166,12 +167,23 @@ export const useTransfering = () => {
     )
   }
 
+  const computeEthTransactionData = () => {
+    const approveSolanaMethodID = '0x93e29346'
+    const solanaPubkey = getSolanaPubkey()
+    const solanaStr = ab2str(solanaPubkey.toBytes(), 'hex')
+    const amountBuffer = new Uint8Array(32)
+    const view = new DataView(amountBuffer.buffer);
+    view.setUint32(28, Number(amount) * Math.pow(10, splToken.decimals))
+    const amountStr = ab2str(amountBuffer, 'hex')
+    return `${approveSolanaMethodID}${solanaStr}${amountStr}`
+  }
+
+
   const createNeonTransfer = async (
-    onSign = () => {},
     onCreateNeonAccount = () => {}
   ) => {
+    setPending(true)
     // required minimum 0.002 sol
-    setTransfering(true)
     const solanaPubkey = getSolanaWalletPubkey()
     const recentBlockhash = await connection.getRecentBlockhash()
     const transaction = new Transaction({
@@ -191,30 +203,29 @@ export const useTransfering = () => {
     }
     const transferInstruction = await createTransferInstruction()
     transaction.add(transferInstruction)
-    try {
-      const signedTransaction = await window.solana.signTransaction(transaction)
-      const sig = await connection.sendRawTransaction(signedTransaction.serialize())
-      setSolanaTransferSign(sig)
-      setTransfering(false)
-    } catch (e) {
-      setError(e)
-      setTransfering(false)
+    if (rejected.current === true) {
+      setPending(false)
+      rejected.current = false
+      return
     }
-  }
-
-  const computeEthTransactionData = () => {
-    const approveSolanaMethodID = '0x93e29346'
-    const solanaPubkey = getSolanaPubkey()
-    const solanaStr = ab2str(solanaPubkey.toBytes(), 'hex')
-    const amountBuffer = new Uint8Array(32)
-    const view = new DataView(amountBuffer.buffer);
-    view.setUint32(28, Number(amount) * Math.pow(10, splToken.decimals))
-    const amountStr = ab2str(amountBuffer, 'hex')
-    return `${approveSolanaMethodID}${solanaStr}${amountStr}`
+    setTransfering(true)
+    setTimeout(async () => {
+      try {
+        const signedTransaction = await window.solana.signTransaction(transaction)
+        const sig = await connection.sendRawTransaction(signedTransaction.serialize())
+        setSolanaTransferSign(sig)
+        setTransfering(false)
+        setPending(false)
+      } catch (e) {
+        setError(e)
+        setTransfering(false)
+        setPending(false)
+      }
+    }, 0)
   }
 
   const createSolanaTransfer = async () => {
-    setTransfering(true)
+    setPending(true)
     const solanaPubkey = getSolanaPubkey()
     const recentBlockhash = await connection.getRecentBlockhash()
     const transactionParameters = {
@@ -223,6 +234,11 @@ export const useTransfering = () => {
       value: '0x00', // Only required to send ether to the recipient from the initiating external account.
       data: computeEthTransactionData()
     };
+    if (rejected.current === true) {
+      setPending(false)
+      rejected.current = false
+      return
+    }
     // txHash is a hex string
     // As with any RPC call, it may throw an error
     const txHash = await window.ethereum.request({
@@ -258,16 +274,26 @@ export const useTransfering = () => {
     }
 
     transaction.add(liquidityInstruction)
-    try {
-      const signedTransaction = await window.solana.signTransaction(transaction)
-      const sig = await connection.sendRawTransaction(signedTransaction.serialize())
-      setSolanaTransferSign(sig)
-      setNeonTransferSign(txHash)
-      setTransfering(false)
-    } catch (e) {
-      setError(e)
-      setTransfering(false)
+    if (rejected.current === true) {
+      setPending(false)
+      rejected.current = false
+      return
     }
+    setTransfering(true)
+    setTimeout(async () => {
+      try {
+        const signedTransaction = await window.solana.signTransaction(transaction)
+        const sig = await connection.sendRawTransaction(signedTransaction.serialize())
+        setSolanaTransferSign(sig)
+        setNeonTransferSign(txHash)
+        setTransfering(false)
+        setPending(false)
+      } catch (e) {
+        setError(e)
+        setTransfering(false)
+        setPending(false)
+      }
+    }, 0)
   }
 
   return {createSolanaTransfer, createNeonTransfer, computeEthTransactionData}
