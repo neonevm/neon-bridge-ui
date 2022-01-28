@@ -14,10 +14,6 @@ const MobileErrorOverlay = () => {
         <Button>Visit Neon-labs</Button>
       </a>
     </div>
-    
-    
-    
-    
   </div>
 }
 const Layout = ({children = null, bodyClassName = '', className = ''}) => {
