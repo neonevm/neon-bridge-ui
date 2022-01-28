@@ -25,6 +25,7 @@ function App() {
                 <SplConverter />
               </StateProvider>
             </Layout>
+            <div id='modals'/>
           </NotieProvider>
         </WalletProvider>
       </ConnectionProvider>

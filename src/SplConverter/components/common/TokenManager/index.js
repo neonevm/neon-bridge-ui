@@ -8,6 +8,7 @@ const TokenRow = ({
     symbol: '',
     address: '',
     name: '',
+    balance: 0
   },
   onClick = () => {}
 }) => {
@@ -21,7 +22,7 @@ const TokenRow = ({
         <div className='text-sm text-gray-500'>{token.name}</div>
       </div>
     </div>
-    <div className='w-1/3 text-sm'>{'balances will be coming soon'}</div>
+    <div className='w-1/3 text-sm text-gray-400 flex items-center justify-end'>{token.balance || 'N/A'}</div>
   </div>
 }
 
@@ -72,7 +73,10 @@ const TokenManager = ({list = [], loading = false, error = undefined, onClose = 
         loading ?
           <div className='p-6'>Loading list...</div> :
           error ?
-            <>Error getting token list</>
+            <div className='flex p-4 flex-col'>
+              <div className='text-lg mb-4'>Error getting token list</div>
+              <div className='text-gray-600'>{error.message}</div>
+            </div>
         : list.length ? <>No tokens has been provided</> : null }
       </div>
   </div>
