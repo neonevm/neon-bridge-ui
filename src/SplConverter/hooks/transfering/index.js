@@ -217,7 +217,7 @@ export const useTransfering = () => {
         setTransfering(false)
         setPending(false)
       } catch (e) {
-        setError(e)
+        setError(e.message)
         setTransfering(false)
         setPending(false)
       }
@@ -241,10 +241,18 @@ export const useTransfering = () => {
     }
     // txHash is a hex string
     // As with any RPC call, it may throw an error
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [transactionParameters],
-    });
+    let txHash
+    try {
+      txHash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters],
+      });
+    } catch (e) {
+      setError(e.message)
+      setTransfering(false)
+      setPending(false)
+      return
+    }
     const liquidityInstruction = await createTransferInstruction(true)
     const transaction = new Transaction({
       recentBlockhash: recentBlockhash.blockhash,
@@ -289,7 +297,7 @@ export const useTransfering = () => {
         setTransfering(false)
         setPending(false)
       } catch (e) {
-        setError(e)
+        setError(e.message)
         setTransfering(false)
         setPending(false)
       }
