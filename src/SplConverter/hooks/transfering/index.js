@@ -289,19 +289,6 @@ export const useTransfering = () => {
       rejected.current = false
       return
     }
-    try {
-      const signedTransaction = await window.solana.signTransaction(transaction)
-      const sig = await connection.sendRawTransaction(signedTransaction.serialize())
-      addTransaction({from: account, to: publicKey.toBase58()})
-      setSolanaTransferSign(sig)
-      setNeonTransferSign(txHash)
-      setTransfering(false)
-      
-    } catch (e) {
-      setError(e.message)
-      setTransfering(false)
-    }
-    setTransfering(true)
     setTimeout(async () => {
       try {
         const signedTransaction = await window.solana.signTransaction(transaction)
