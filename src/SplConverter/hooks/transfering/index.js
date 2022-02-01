@@ -298,7 +298,7 @@ export const useTransfering = () => {
       setTransfering(false)
       
     } catch (e) {
-      setError(e)
+      setError(e.message)
       setTransfering(false)
     }
     setTransfering(true)
