@@ -48,7 +48,7 @@ const TokenRow = ({
         if (balance === undefined) return <></>
         if ((direction === 'neon' && publicKey && netKey === 'sol') || (direction === 'solana' && account && netKey === 'eth')) {
           return <div className='py-1 flex items-center' key={netKey}>
-            <span className='mr-2'>{balance}</span>
+            <span className='mr-2'>{JSON.stringify(balance)}</span>
             {netKey === 'eth' ? <MetamaskIcon/> : <PhantomIcon/>}
           </div>
         }
