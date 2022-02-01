@@ -14,7 +14,6 @@ export const Transfering = () => {
   const [reset, setReset] = useState(false)
   const timeout = useRef(null)
   useEffect(() => {
-    console.log('pending update ', pending)
     if (pending === false) return
     timeout.current = setTimeout(() => {
       setReset(true)
