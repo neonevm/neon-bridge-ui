@@ -47,7 +47,7 @@ export function TokensProvider({ children = undefined}) {
     console.log('fix')
     const balanceData = completed[0]
     if (balanceData === 0) return 0
-    if (balanceData && balanceData.value && balanceData.value.uiAmount) {
+    if (balanceData && balanceData.value && balanceData.value.uiAmount !== undefined)  {
       return balanceData.value.uiAmount
     }
     return completed[0]
