@@ -179,7 +179,6 @@ export const useTransfering = () => {
     return `${approveSolanaMethodID}${solanaStr}${amountStr}`
   }
 
-
   const createNeonTransfer = async (
     onCreateNeonAccount = () => {}
   ) => {
@@ -209,16 +208,6 @@ export const useTransfering = () => {
       rejected.current = false
       return
     }
-    try {
-      const signedTransaction = await window.solana.signTransaction(transaction)
-      const sig = await connection.sendRawTransaction(signedTransaction.serialize())
-      addTransaction({from: publicKey.toBase58(), to: account})
-      setSolanaTransferSign(sig)
-      setTransfering(false)
-    } catch (e) {
-      setError(e)
-      setTransfering(false)
-    }
     setTransfering(true)
     setTimeout(async () => {
       try {
@@ -226,6 +215,7 @@ export const useTransfering = () => {
         const sig = await connection.sendRawTransaction(signedTransaction.serialize())
         setSolanaTransferSign(sig)
         setTransfering(false)
+        addTransaction({from: publicKey.toBase58(), to: account})
         setPending(false)
       } catch (e) {
         setError(e.message)
@@ -293,6 +283,7 @@ export const useTransfering = () => {
     }
 
     transaction.add(liquidityInstruction)
+    setTransfering(true)
     if (rejected.current === true) {
       setPending(false)
       rejected.current = false
@@ -315,6 +306,7 @@ export const useTransfering = () => {
       try {
         const signedTransaction = await window.solana.signTransaction(transaction)
         const sig = await connection.sendRawTransaction(signedTransaction.serialize())
+        addTransaction({from: account, to: publicKey.toBase58()})
         setSolanaTransferSign(sig)
         setNeonTransferSign(txHash)
         setTransfering(false)

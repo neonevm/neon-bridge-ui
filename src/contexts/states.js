@@ -93,6 +93,17 @@ export function StateProvider({ children = undefined}) {
     })
     setSteps(currentSteps)
   }
+  const resetStates = () => {
+    setSolanaTransferSign('')
+    setNeonTransferSign('')
+    resetSteps()
+    rejected.current = false
+    console.log('pending false by reset')
+    setPending(false)
+    setTransfering(false)
+    setAmount(0)
+    setSplToken(undefined)
+  }
   useEffect(() => {
     if (error !== undefined) setError(undefined)
   // eslint-disable-next-line
@@ -100,6 +111,7 @@ export function StateProvider({ children = undefined}) {
 
   useEffect(() => {
     if (rejected.current === true && pending === true) {
+      console.log('pending false by reject')
       setPending(false)
     }
   // eslint-disable-next-line
@@ -119,7 +131,7 @@ export function StateProvider({ children = undefined}) {
       transfering, setTransfering,
       solanaTransferSign, setSolanaTransferSign,
       neonTransferSign, setNeonTransferSign,
-      rejected,
+      rejected, resetStates,
       pending, setPending
     }}>
     {children}
