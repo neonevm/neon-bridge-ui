@@ -44,6 +44,7 @@ export function TokensProvider({ children = undefined}) {
       console.warn(error.message)
       return [0, undefined]
     })
+    console.log('fix')
     const balanceData = completed[0]
     if (balanceData === 0) return 0
     if (balanceData && balanceData.value && balanceData.value.uiAmount) {
