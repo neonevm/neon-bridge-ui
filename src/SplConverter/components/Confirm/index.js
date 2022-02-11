@@ -8,17 +8,11 @@ import { withNotie } from '@/common/Notifications';
 import { ErrorHandler } from "../common/ErrorHandler";
 export const Confirm = withNotie((props) => {
   const { amount, splToken, direction, error } = useStatesContext()
-  const {createNeonTransfer, createSolanaTransfer} = useTransfering()
+  const {initNeonTransfer, initSolanaTransfer} = useTransfering()
 
   const handleConfirmTransfer = () => {
-    if (direction === 'neon') createNeonTransfer(() => {
-      props.notie.success('Transfering Complete')
-    }, () => {
-      props.notie.info(`Neon account don't find on this address. We will create new one and recieve you 1000 test tokens.`)
-    })
-    else if (direction === 'solana') createSolanaTransfer(() => {
-      props.notie.success('Transfering Complete')
-    })
+    if (direction === 'neon') initNeonTransfer()
+    else if (direction === 'solana') initSolanaTransfer()
   }
 
   useEffect(() => {
