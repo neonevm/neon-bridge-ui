@@ -70,7 +70,7 @@ class NeonPortal {
   }
   
   _getNeonAccountSeed () {
-    return this.getEthSeed(this.neonWalletAddress)
+    return this._getEthSeed(this.neonWalletAddress)
   }
 
   async getNeonAccount () {
@@ -199,7 +199,7 @@ class NeonPortal {
   async _createTransferInstruction (amount, splToken, toSolana = false) {
     const mintPubkey = this._getSolanaPubkey(splToken.address_spl)
     const solanaPubkey = this._getSolanaWalletPubkey()
-    const {erc20Address} = await this._getERC20WrapperAddress()
+    const {erc20Address} = await this._getERC20WrapperAddress(splToken)
     const solanaBalanceAccount = await Token.getAssociatedTokenAddress(
       ASSOCIATED_TOKEN_PROGRAM_ID,
       TOKEN_PROGRAM_ID,
@@ -225,7 +225,7 @@ class NeonPortal {
     symbol: "",
     logoURI: ""
   }) {
-    if (this.broken === false) {
+    if (this.broken === true) {
       console.warn('Create Neon Transfer: You try to transfer after configuring errors. Please, fix it first')
       return
     }
@@ -270,7 +270,7 @@ class NeonPortal {
     symbol: "",
     logoURI: ""
   }) {
-    if (this.broken === false) {
+    if (this.broken === true) {
       console.warn('Create Solana Transfer: You try to transfer after configuring errors. Please, fix it first')
       return
     }
