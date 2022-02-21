@@ -11,7 +11,6 @@ export const useTransfering = () => {
   const {account} = useWeb3React()
   const { createNeonTransfer, createSolanaTransfer } = useNeonTransfer({
     onBeforeCreateInstruction: () => {
-      console.log(this)
       setPending(true)
     },
     onBeforeSignTransaction: () => {
