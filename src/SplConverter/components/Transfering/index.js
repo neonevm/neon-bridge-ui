@@ -50,7 +50,7 @@ export const Transfering = () => {
       <DoneIcon className='mb-10'/>
       <div className='font-medium text-xl mb-6'>Transfer complete</div>
       {neonTransferSign ?
-        <a href={`${ASSOC_TX_EXPLORERS[REACT_APP_NETWORK]}/tx/${neonTransferSign}`}
+        <a href={`${ASSOC_TX_EXPLORERS[REACT_APP_NETWORK]}/tx/${neonTransferSign}?network=${REACT_APP_NETWORK}`}
           target='_blank'
           rel='noopener noreferrer'
       className='text-blue-500 mb-4'>View on Neonscan</a> : null}
