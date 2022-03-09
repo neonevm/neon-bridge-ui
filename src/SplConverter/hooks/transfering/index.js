@@ -5,7 +5,7 @@ import useNeonTransfer from 'neon-portal/src/react'
 import useTransactionHistory from '../useTransactionHistory'
 
 export const useTransfering = () => {
-  const {setPending, setTransfering, rejected, setSolanaTransferSign, setError} = useStatesContext()
+  const {setPending, setTransfering, rejected, setSolanaTransferSign, setNeonTransferSign, setError} = useStatesContext()
   const {addTransaction} = useTransactionHistory()
   const {publicKey} = useWallet()
   const {account} = useWeb3React()
@@ -22,7 +22,8 @@ export const useTransfering = () => {
       setTransfering(true)
     },
     onSuccessSign: (sig, txHash) => {
-      setSolanaTransferSign(sig, txHash)
+      setSolanaTransferSign(sig)
+      setNeonTransferSign(txHash)
       setTransfering(false)
       addTransaction({from: publicKey.toBase58(), to: account})
       setPending(false)
