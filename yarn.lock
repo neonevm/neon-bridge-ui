@@ -9317,10 +9317,10 @@ neo-async@^2.5.0, neo-async@^2.6.1, neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-neon-portal@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/neon-portal/-/neon-portal-1.0.16.tgz#117c150df94abbd76044270d43bd4e3287b55b85"
-  integrity sha512-FUka4SbE8evAez3FEY0jB9CyZeVRDxAEqNXa5oWdHkjXJQ+3p6El50Wvks7DSvyl1aTAektkOB87jMH+mYTHfQ==
+neon-portal@1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/neon-portal/-/neon-portal-1.0.18.tgz#2c3cc9fa640c5532b5fe289285cc4e3c6f862a8a"
+  integrity sha512-f7UIcVd5KT6438Tsogkme0A0h0gfOIXmRoABeKwyZ2su+DkEGKh4W3Ngo+Eb7zAcdfA0xpsvky5Huu2s9Lr/1w==
   dependencies:
     "@solana/spl-token" "^0.1.8"
     "@solana/wallet-adapter-base" "^0.7.0"
